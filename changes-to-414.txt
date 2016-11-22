@@ -1,0 +1,8 @@
+
+On Blueprint to low poly
+- Absolute World Position -> World Position
+
+
+
+
+
