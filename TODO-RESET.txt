@@ -1,0 +1,11 @@
+Passos para resetar o projeto Unreal:
+
+1- Checkout do ponto 
+2- Deletar as pastas:
+	.vs
+	Binaries
+	Build
+	Intermediate
+	Saved
+	*.sln
+	*.VC.db 
