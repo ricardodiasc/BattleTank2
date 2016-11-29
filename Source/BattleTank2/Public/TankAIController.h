@@ -21,7 +21,9 @@ public:
 
 	ATank* GetControlledTank() const;
 
+	virtual void Tick(float DeltaSeconds) override;
+
 private:
-	ATank* GetPlayerController() const;
+	ATank* GetPlayerTank() const;
 	
 };

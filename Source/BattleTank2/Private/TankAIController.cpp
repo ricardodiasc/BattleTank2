@@ -11,7 +11,20 @@ ATank* ATankAIController::GetControlledTank() const {
 	return Cast<ATank>(GetPawn());
 }
 
-ATank * ATankAIController::GetPlayerController() const
+void ATankAIController::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	//TODO: move towards player
+	//TODO: aim
+	auto PlayerTank = GetPlayerTank();
+	if (PlayerTank) {
+		GetControlledTank()->AimAt(PlayerTank->GetActorLocation());
+	}
+	//TODO: fire
+}
+
+ATank * ATankAIController::GetPlayerTank() const
 {
 	auto PlayerController = GetWorld()->GetFirstPlayerController();
 	
@@ -34,7 +47,7 @@ void ATankAIController::BeginPlay() {
 	else {
 		auto Name = ControlledTank->GetName();
 		UE_LOG(LogTemp, Warning, TEXT("AI possesed by :%s"), *Name);
-		auto PlayerTank = GetPlayerController();
+		auto PlayerTank = GetPlayerTank();
 		auto PlayerTankName = PlayerTank->GetName();
 
 		UE_LOG(LogTemp, Warning, TEXT("AI Got Player Controller with name %s"), *PlayerTankName);
