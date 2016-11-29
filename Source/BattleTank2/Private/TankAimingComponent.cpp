@@ -34,10 +34,12 @@ void UTankAimingComponent::TickComponent( float DeltaTime, ELevelTick TickType, 
 }
 
 
-void UTankAimingComponent::AimAt(FVector HitLocation) {
+void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 	if (!Barrel) { return; }
-	auto BarrelLocation = Barrel->GetComponentLocation();
-	UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s from %s"), *GetOwner()->GetName(), *HitLocation.ToString(), *BarrelLocation.ToString());
+
+	UE_LOG(LogTemp, Warning, TEXT("Firing at %f"), LaunchSpeed);
+
+	//UGameplayStatics::SuggestProjectileVelocity();
 }
 
 void UTankAimingComponent::SetBarrel(UStaticMeshComponent * BarrelToSet)

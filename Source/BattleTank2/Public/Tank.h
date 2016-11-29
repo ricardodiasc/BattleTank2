@@ -16,6 +16,9 @@ public:
 	// Sets default values for this pawn's properties
 	ATank();
 
+	UPROPERTY(EditAnywhere, Category="Firing")
+	float LauchSpeed = 10000.0f;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
