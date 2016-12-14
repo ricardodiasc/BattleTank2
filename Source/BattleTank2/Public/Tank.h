@@ -8,6 +8,7 @@
 class UTankAimingComponent;
 class UTankBarrel;
 class UTankTurret;
+class AProjectile;
 
 UCLASS()
 class BATTLETANK2_API ATank : public APawn
@@ -41,5 +42,11 @@ public:
 protected:
 
 	UTankAimingComponent* TankAimingComponent = nullptr;
+private:
+	UPROPERTY(EditAnywhere, Category = Firing)
+	TSubclassOf<AProjectile> ProjectileBlueprint;
+
+	//Keep a reference to barrel and find location to spawn projectile
+	UTankBarrel* Barrel = nullptr;
 	
 };

@@ -3,6 +3,7 @@
 #include "BattleTank2.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
+#include "Projectile.h"
 #include "TankAimingComponent.h"
 #include "Tank.h"
 
@@ -36,11 +37,13 @@ void ATank::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 
 void ATank::AimAt(FVector HitLocation) 
 {
+	
 	TankAimingComponent->AimAt(HitLocation, LauchSpeed);
 }
 
 void ATank::SetBarrel(UTankBarrel * Barrel)
 {
+	this->Barrel = Barrel;
 	TankAimingComponent->SetBarrel(Barrel);
 }
 
@@ -51,4 +54,9 @@ void ATank::SetTurret(UTankTurret * Turret) {
 
 void ATank::Fire(){
 	UE_LOG(LogTemp, Warning, TEXT("Fire!!"));
+
+	auto ProjectileLocation = Barrel->GetSocketLocation(FName("Projectile"));
+	auto ProjectileRotation = Barrel->GetSocketRotation(FName("Projectile"));
+	FActorSpawnParameters SpawnParameters;
+	GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,ProjectileLocation, ProjectileRotation,SpawnParameters);
 }
