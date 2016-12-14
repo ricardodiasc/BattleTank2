@@ -7,6 +7,7 @@
 
 class UTankAimingComponent;
 class UTankBarrel;
+class UTankTurret;
 
 UCLASS()
 class BATTLETANK2_API ATank : public APawn
@@ -18,7 +19,7 @@ public:
 	ATank();
 
 	UPROPERTY(EditAnywhere, Category="Firing")
-	float LauchSpeed = 10000.0f;
+	float LauchSpeed = 4000.0f;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -32,6 +33,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Setup")
 	void SetBarrel(UTankBarrel* Barrel);
 
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void SetTurret(UTankTurret* Turret);
+
+	UFUNCTION(BlueprintCallable, Category = "Custom")
+	void Fire();
 protected:
 
 	UTankAimingComponent* TankAimingComponent = nullptr;

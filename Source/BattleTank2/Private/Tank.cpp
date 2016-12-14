@@ -2,6 +2,7 @@
 
 #include "BattleTank2.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 #include "TankAimingComponent.h"
 #include "Tank.h"
 
@@ -43,3 +44,11 @@ void ATank::SetBarrel(UTankBarrel * Barrel)
 	TankAimingComponent->SetBarrel(Barrel);
 }
 
+void ATank::SetTurret(UTankTurret * Turret) {
+	
+	TankAimingComponent->SetTurret(Turret);
+}
+
+void ATank::Fire(){
+	UE_LOG(LogTemp, Warning, TEXT("Fire!!"));
+}

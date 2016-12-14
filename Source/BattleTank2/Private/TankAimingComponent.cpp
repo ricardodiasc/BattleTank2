@@ -2,6 +2,7 @@
 
 #include "BattleTank2.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 #include "TankAimingComponent.h"
 
 
@@ -10,7 +11,7 @@ UTankAimingComponent::UTankAimingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 	// ...
 }
@@ -21,7 +22,7 @@ UTankAimingComponent::UTankAimingComponent()
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 	if (!Barrel) { return; }
 
-	UE_LOG(LogTemp, Warning, TEXT("Firing at %f"), LaunchSpeed);
+	//UE_LOG(LogTemp, Warning, TEXT("Firing at %f"), LaunchSpeed);
 	FVector OutLaunchVelocity;
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 
@@ -47,22 +48,26 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 		//UE_LOG(LogTemp, Warning, TEXT("AimingAt : %s"), *OutLaunchVelocity.ToString());
 		MoveBarrelTowards(AimDirection);
 		auto Time = GetWorld()->GetTimeSeconds();
-		UE_LOG(LogTemp, Warning, TEXT("LogTime %f - Aim Solution Found"), Time);
+		//UE_LOG(LogTemp, Warning, TEXT("LogTime %f - Aim Solution Found"), Time);
 		
 	}
-	else {
-		auto Time = GetWorld()->GetTimeSeconds();
-		UE_LOG(LogTemp, Warning, TEXT("LogTime %f - Aim Solution NOT Found"), Time);
-
-	}
+	//else {
+		//auto Time = GetWorld()->GetTimeSeconds();
+		//UE_LOG(LogTemp, Warning, TEXT("LogTime %f - Aim Solution NOT Found"), Time);
+	//}
 	
 }
 
 void UTankAimingComponent::SetBarrel(UTankBarrel * BarrelToSet)
 {
+	if (!BarrelToSet) { return; }
 	Barrel = BarrelToSet;
 }
 
+void UTankAimingComponent::SetTurret(UTankTurret* TurretToSet) {
+	if (!TurretToSet) { return; }
+	this->Turret = TurretToSet;
+}
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 	if (!Barrel) { return; }
@@ -73,5 +78,5 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 	//UE_LOG(LogTemp, Warning, TEXT("AimAsRotator : %s"), *AimAsRotator.ToString());
 
 	Barrel->Elevate(DeltaRotator.Pitch);
-
+	Turret->Rotate(DeltaRotator.Yaw);
 }
