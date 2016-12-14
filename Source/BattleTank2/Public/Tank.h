@@ -22,6 +22,9 @@ public:
 	UPROPERTY(EditAnywhere, Category="Firing")
 	float LauchSpeed = 4000.0f;
 
+	float ReloadTimeInSeconds = 3.0f;
+	double LastFireTime = 0.0;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
