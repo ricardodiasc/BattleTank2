@@ -14,14 +14,6 @@ ATank* ATankPlayerController::GetControlledTank() const{
 
 void ATankPlayerController::BeginPlay() {
 	Super::BeginPlay();
-	auto ControlledTank = GetControlledTank();
-	if (!ControlledTank) {
-		UE_LOG(LogTemp, Warning, TEXT("No tank possesssed for player..."));
-	}
-	else {
-		auto Name = ControlledTank->GetName();
-		UE_LOG(LogTemp, Warning, TEXT("Player possesed by :%s"), *Name);
-	}
 }
 
 // Called every frame
