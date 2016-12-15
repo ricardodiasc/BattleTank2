@@ -13,11 +13,18 @@ void UTankMovementComponent::Initialize(UTankTrack* TankLeftTrack, UTankTrack* T
 }
 
 void UTankMovementComponent::IntendMoveForward(float Throw) {
-	UE_LOG(LogTemp, Warning, TEXT("Throw at %f"), Throw);
 	if (!TankLeftTrack || !TankRightTrack) { return; }
 
 	TankLeftTrack->SetThrottle(Throw);
 	TankRightTrack->SetThrottle(Throw);
 
 	//TODO Prevent double speed on dual control use
+}
+
+void UTankMovementComponent::IntendMoveRight(float Throw) {
+	if (!TankLeftTrack || !TankRightTrack) {
+		return;
+	}
+	TankLeftTrack->SetThrottle(Throw);
+	TankRightTrack->SetThrottle(-Throw);
 }
