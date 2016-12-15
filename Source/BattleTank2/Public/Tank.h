@@ -6,6 +6,7 @@
 #include "Tank.generated.h"
 
 class UTankAimingComponent;
+class UTankMovementComponent;
 class UTankBarrel;
 class UTankTurret;
 class AProjectile;
@@ -45,8 +46,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Custom")
 	void Fire();
 protected:
-
 	UTankAimingComponent* TankAimingComponent = nullptr;
+
 private:
 	UPROPERTY(EditAnywhere, Category = Firing)
 	TSubclassOf<AProjectile> ProjectileBlueprint;
