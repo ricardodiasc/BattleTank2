@@ -19,5 +19,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Tank input")
 	void SetThrottle(float Throttle);
 	
+	UPROPERTY(EditDefaultsOnly)
+	float TrackMaxDrivingForce = 400000.0f; //
+
 	
 };
