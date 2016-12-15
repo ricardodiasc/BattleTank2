@@ -19,10 +19,12 @@ public:
 	// Sets default values for this pawn's properties
 	ATank();
 
-	UPROPERTY(EditAnywhere, Category="Firing")
+	UPROPERTY(EditDefaultsOnly, Category="Firing")
 	float LauchSpeed = 4000.0f;
 
+	UPROPERTY(EditDefaultsOnly, Category =  "Firing")
 	float ReloadTimeInSeconds = 3.0f;
+
 	double LastFireTime = 0.0;
 
 	// Called when the game starts or when spawned

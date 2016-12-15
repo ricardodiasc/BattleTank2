@@ -19,14 +19,14 @@ class BATTLETANK2_API ATankPlayerController : public APlayerController
 public:
 
 	//Screen Location CrossHair at LocationX
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float CrossHairLocationX = 0.5f;
 	
 	//Screen Location CrossHair at Location y
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float CrossHairLocationY = 0.333333f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float LineTraceRange = 1000000.0f;
 
 
