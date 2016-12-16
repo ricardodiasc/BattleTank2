@@ -23,4 +23,6 @@ public:
 
 	virtual void Tick(float DeltaSeconds) override;
 
+	//Distance to AI tank can aproximate
+	float AcceptanceRadius = 3000.0f;
 };

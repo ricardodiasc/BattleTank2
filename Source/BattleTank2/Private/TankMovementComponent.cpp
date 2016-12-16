@@ -28,3 +28,9 @@ void UTankMovementComponent::IntendMoveRight(float Throw) {
 	TankLeftTrack->SetThrottle(Throw);
 	TankRightTrack->SetThrottle(-Throw);
 }
+
+void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) {
+	//No need to call Super because we are replacing the functionality
+	auto TankName = GetOwner()->GetName();
+	UE_LOG(LogTemp, Warning, TEXT("Tank AI [%s] is headed towards to %s"),*TankName, *MoveVelocity.ToString())
+}
