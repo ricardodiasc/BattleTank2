@@ -46,10 +46,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Custom")
 	void Fire();
 protected:
+	UPROPERTY(BlueprintReadOnly)
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
 private:
-	UPROPERTY(EditAnywhere, Category = Firing)
+	UPROPERTY(EditAnywhere, Category = "Firing")
 	TSubclassOf<AProjectile> ProjectileBlueprint;
 
 	//Keep a reference to barrel and find location to spawn projectile
