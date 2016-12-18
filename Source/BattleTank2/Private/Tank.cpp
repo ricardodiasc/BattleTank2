@@ -15,60 +15,42 @@ ATank::ATank()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-
-	TankAimingComponent = CreateAbstractDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
-	
-
 }
+
+
 
 // Called when the game starts or when spawned
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	
-}
-
-
-// Called to bind functionality to input
-void ATank::SetupPlayerInputComponent(class UInputComponent* InputComponent)
-{
-	Super::SetupPlayerInputComponent(InputComponent);
-
+	TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
+	Barrel = FindComponentByClass<UTankBarrel>();
 }
 
 
 void ATank::AimAt(FVector HitLocation) 
 {
-	
-	TankAimingComponent->AimAt(HitLocation, LauchSpeed);
-}
-
-void ATank::SetBarrel(UTankBarrel * Barrel)
-{
-	this->Barrel = Barrel;
-	TankAimingComponent->SetBarrel(Barrel);
-}
-
-void ATank::SetTurret(UTankTurret * Turret) {
-	
-	TankAimingComponent->SetTurret(Turret);
+	if (ensure(TankAimingComponent != nullptr)) { 
+		TankAimingComponent->AimAt(HitLocation, LauchSpeed);
+	}
 }
 
 void ATank::Fire(){
 	
 	bool IsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
-	if (Barrel && IsReloaded) {
-		auto ProjectileLocation = Barrel->GetSocketLocation(FName("Projectile"));
-		auto ProjectileRotation = Barrel->GetSocketRotation(FName("Projectile"));
-		FActorSpawnParameters SpawnParameters;
-		auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,ProjectileLocation, ProjectileRotation,SpawnParameters);
 
-		Projectile->LaunchProjectile(LauchSpeed);
+	if (ensure(Barrel != nullptr)) {
+		if (IsReloaded) {
+			auto ProjectileLocation = Barrel->GetSocketLocation(FName("Projectile"));
+			auto ProjectileRotation = Barrel->GetSocketRotation(FName("Projectile"));
+			FActorSpawnParameters SpawnParameters;
+			auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,ProjectileLocation, ProjectileRotation,SpawnParameters);
 
-		LastFireTime = FPlatformTime::Seconds();
+			Projectile->LaunchProjectile(LauchSpeed);
 
+			LastFireTime = FPlatformTime::Seconds();
+
+		}
 	}
-
-
 
 }

@@ -5,14 +5,12 @@
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
 
-	
-
-
 //~ Forward Declaration
 class ATank;
+class UTankAimingComponent;
 
 /**
- * 
+ * Responsible for implement player controller
  */
 UCLASS()
 class BATTLETANK2_API ATankPlayerController : public APlayerController
@@ -41,6 +39,10 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 	void AimTowardsCrosshair();
+	
+	//Event Responsible for trigger TankAimingComponent Found
+	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+	void FoundAimComponent(UTankAimingComponent* AimComponent);
 
 private:
 	bool GetSightRayHitLocation(FVector &HitLocation) const;

@@ -6,15 +6,14 @@
 
 
 void UTankMovementComponent::Initialize(UTankTrack* TankLeftTrack, UTankTrack* TankRightTrack) {
-	if (!TankLeftTrack || !TankRightTrack) { return; }
+	if (!ensure(TankLeftTrack && TankRightTrack)) { return; }
 	
 	this->TankLeftTrack = TankLeftTrack;
 	this->TankRightTrack = TankRightTrack;
 }
 
 void UTankMovementComponent::IntendMoveForward(float Throw) {
-	if (!TankLeftTrack || !TankRightTrack) { return; }
-
+	if (!ensure(TankLeftTrack && TankRightTrack)) { return; }
 	TankLeftTrack->SetThrottle(Throw);
 	TankRightTrack->SetThrottle(Throw);
 
@@ -22,17 +21,18 @@ void UTankMovementComponent::IntendMoveForward(float Throw) {
 }
 
 void UTankMovementComponent::IntendMoveRight(float Throw) {
-	if (!TankLeftTrack || !TankRightTrack) {
-		return;
+	if (ensure(TankLeftTrack != nullptr && TankRightTrack != nullptr)) { 
+		TankLeftTrack->SetThrottle(Throw);
+		TankRightTrack->SetThrottle(-Throw);
 	}
-	TankLeftTrack->SetThrottle(Throw);
-	TankRightTrack->SetThrottle(-Throw);
+
 }
 
 void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) {
 	//No need to call Super because we are replacing the functionality
-	auto TankName = GetOwner()->GetName();
-	UE_LOG(LogTemp, Warning, TEXT("Tank AI [%s] is headed towards to %s"),*TankName, *MoveVelocity.ToString())
+	
+	//auto TankName = GetOwner()->GetName();
+	//UE_LOG(LogTemp, Warning, TEXT("Tank AI [%s] is headed towards to %s"),*TankName, *MoveVelocity.ToString())
 	
 	auto TankForwardVector = GetOwner()->GetActorForwardVector().SafeNormal();
 	auto AIForwardIntention = MoveVelocity.GetSafeNormal();
@@ -40,7 +40,6 @@ void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool
 	float AIThrow = FVector::DotProduct(TankForwardVector, AIForwardIntention);
 	
 	auto  RightThrow = FVector::CrossProduct(TankForwardVector, AIForwardIntention).Z;
-	UE_LOG(LogTemp, Warning, TEXT("Right- %f"), RightThrow);
 	IntendMoveRight(RightThrow);
 	IntendMoveForward(AIThrow);
 }

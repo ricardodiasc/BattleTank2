@@ -17,45 +17,48 @@ UTankAimingComponent::UTankAimingComponent()
 }
 
 
+void UTankAimingComponent::Initialize(UTankBarrel* TankBarrel, UTankTurret* TankTurret) {
+	this->Barrel = TankBarrel;
+	this->Turret = TankTurret;
 
+}
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
-	if (!Barrel) { return; }
+	if (ensure(Barrel != nullptr)) {
+		//UE_LOG(LogTemp, Warning, TEXT("Firing at %f"), LaunchSpeed);
+		FVector OutLaunchVelocity;
+		FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 
-	//UE_LOG(LogTemp, Warning, TEXT("Firing at %f"), LaunchSpeed);
-	FVector OutLaunchVelocity;
-	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 
+		bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
+			this,
+			OutLaunchVelocity,
+			StartLocation,
+			HitLocation,
+			LaunchSpeed,
+			false,
+			0.0f,
+			0.0f,
+			ESuggestProjVelocityTraceOption::DoNotTrace,
+			FCollisionResponseParams::DefaultResponseParam,
+			TArray<AActor*>(),
+			false);
 
-	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
-		this,
-		OutLaunchVelocity,
-		StartLocation,
-		HitLocation,
-		LaunchSpeed,
-		false,
-		0.0f,
-		0.0f,
-		ESuggestProjVelocityTraceOption::DoNotTrace,
-		FCollisionResponseParams::DefaultResponseParam,
-		TArray<AActor*>(),
-		false);
+		if (bHaveAimSolution) {
 
-	if (bHaveAimSolution) {
+			FVector AimDirection = OutLaunchVelocity.GetSafeNormal();
 
-		FVector AimDirection = OutLaunchVelocity.GetSafeNormal();
+			//UE_LOG(LogTemp, Warning, TEXT("AimingAt : %s"), *OutLaunchVelocity.ToString());
+			MoveBarrelTowards(AimDirection);
+			auto Time = GetWorld()->GetTimeSeconds();
+			//UE_LOG(LogTemp, Warning, TEXT("LogTime %f - Aim Solution Found"), Time);
 
-		//UE_LOG(LogTemp, Warning, TEXT("AimingAt : %s"), *OutLaunchVelocity.ToString());
-		MoveBarrelTowards(AimDirection);
-		auto Time = GetWorld()->GetTimeSeconds();
-		//UE_LOG(LogTemp, Warning, TEXT("LogTime %f - Aim Solution Found"), Time);
-		
+		}
+		//else {
+			//auto Time = GetWorld()->GetTimeSeconds();
+			//UE_LOG(LogTemp, Warning, TEXT("LogTime %f - Aim Solution NOT Found"), Time);
+		//}
 	}
-	//else {
-		//auto Time = GetWorld()->GetTimeSeconds();
-		//UE_LOG(LogTemp, Warning, TEXT("LogTime %f - Aim Solution NOT Found"), Time);
-	//}
-	
 }
 
 void UTankAimingComponent::SetBarrel(UTankBarrel * BarrelToSet)

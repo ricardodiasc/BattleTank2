@@ -3,6 +3,7 @@
 
 #include "BattleTank2.h"
 #include "Tank.h"
+#include "TankAimingComponent.h"
 #include "TankPlayerController.h"
 
 
@@ -14,6 +15,11 @@ ATank* ATankPlayerController::GetControlledTank() const{
 
 void ATankPlayerController::BeginPlay() {
 	Super::BeginPlay();
+
+	auto AimComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+	if (ensure(AimComponent != nullptr)) {
+		FoundAimComponent(AimComponent);
+	}
 }
 
 // Called every frame
@@ -26,16 +32,15 @@ void ATankPlayerController::Tick(float DeltaTime)
 
 //Aim At Crosshair on screen. Used as reference to rotate the barrel.
 void ATankPlayerController::AimTowardsCrosshair() {
-	if (!GetControlledTank()) {
-		return;
+	if (ensure(GetControlledTank())) {
+		FVector HitLocation;
+
+		if (GetSightRayHitLocation(HitLocation)) {
+			//UE_LOG(LogTemp, Warning, TEXT("Hit Location is %s"), *HitLocation.ToString());
+			GetControlledTank()->AimAt(HitLocation);
+		}
 	}
 
-	FVector HitLocation;
-
-	if (GetSightRayHitLocation(HitLocation)) {
-		//UE_LOG(LogTemp, Warning, TEXT("Hit Location is %s"), *HitLocation.ToString());
-		GetControlledTank()->AimAt(HitLocation);
-	}
 }
 
 bool ATankPlayerController::GetSightRayHitLocation(FVector &HitLocation) const {
