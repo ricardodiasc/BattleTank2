@@ -5,7 +5,6 @@
 #include "TankTurret.h"
 #include "Projectile.h"
 #include "TankAimingComponent.h"
-#include "TankMovementComponent.h"
 #include "Tank.h"
 
 
@@ -24,6 +23,8 @@ void ATank::BeginPlay()
 {
 	Super::BeginPlay();
 	TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
+	
+	//TODO Barrel here is only to Fire. To be removed later.
 	Barrel = FindComponentByClass<UTankBarrel>();
 }
 

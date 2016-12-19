@@ -25,7 +25,6 @@ void UTankAimingComponent::Initialize(UTankBarrel* TankBarrel, UTankTurret* Tank
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 	if (ensure(Barrel != nullptr)) {
-		//UE_LOG(LogTemp, Warning, TEXT("Firing at %f"), LaunchSpeed);
 		FVector OutLaunchVelocity;
 		FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 
@@ -45,25 +44,17 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 			false);
 
 		if (bHaveAimSolution) {
-
 			FVector AimDirection = OutLaunchVelocity.GetSafeNormal();
 
-			//UE_LOG(LogTemp, Warning, TEXT("AimingAt : %s"), *OutLaunchVelocity.ToString());
 			MoveBarrelTowards(AimDirection);
-			auto Time = GetWorld()->GetTimeSeconds();
-			//UE_LOG(LogTemp, Warning, TEXT("LogTime %f - Aim Solution Found"), Time);
-
+		
 		}
-		//else {
-			//auto Time = GetWorld()->GetTimeSeconds();
-			//UE_LOG(LogTemp, Warning, TEXT("LogTime %f - Aim Solution NOT Found"), Time);
-		//}
 	}
 }
 
 void UTankAimingComponent::SetBarrel(UTankBarrel * BarrelToSet)
 {
-	if (!BarrelToSet) { return; }
+	if (!ensure(BarrelToSet)) { return; }
 	Barrel = BarrelToSet;
 }
 
@@ -73,8 +64,8 @@ void UTankAimingComponent::SetTurret(UTankTurret* TurretToSet) {
 }
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
-	if (!Barrel) { return; }
-	
+	if (!ensure(Barrel)) { return; }
+
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
