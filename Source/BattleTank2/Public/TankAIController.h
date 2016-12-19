@@ -6,7 +6,6 @@
 #include "TankAIController.generated.h"
 
 
-class ATank;
 
 /**
  * 
@@ -23,6 +22,6 @@ public:
 
 	virtual void Tick(float DeltaSeconds) override;
 
-	//Distance to AI tank can aproximate
+	//Distance to AI tank can approximate
 	float AcceptanceRadius = 3000.0f;
 };

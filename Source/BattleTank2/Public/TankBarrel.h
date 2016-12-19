@@ -15,6 +15,8 @@ class BATTLETANK2_API UTankBarrel : public UStaticMeshComponent
 	
 public:
 	void Elevate(float RelativeSpeed);
+
+
 private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")

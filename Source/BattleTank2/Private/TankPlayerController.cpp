@@ -2,21 +2,13 @@
 
 
 #include "BattleTank2.h"
-#include "Tank.h"
 #include "TankAimingComponent.h"
 #include "TankPlayerController.h"
-
-
-
-ATank* ATankPlayerController::GetControlledTank() const{
-	return Cast<ATank>(GetPawn());
-}
-
 
 void ATankPlayerController::BeginPlay() {
 	Super::BeginPlay();
 
-	auto AimComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+	auto AimComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 	if (ensure(AimComponent != nullptr)) {
 		FoundAimComponent(AimComponent);
 	}
@@ -32,12 +24,13 @@ void ATankPlayerController::Tick(float DeltaTime)
 
 //Aim At Crosshair on screen. Used as reference to rotate the barrel.
 void ATankPlayerController::AimTowardsCrosshair() {
-	if (ensure(GetControlledTank())) {
+	auto AimComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+
+	if (ensure(AimComponent)) {
 		FVector HitLocation;
 
 		if (GetSightRayHitLocation(HitLocation)) {
-			//UE_LOG(LogTemp, Warning, TEXT("Hit Location is %s"), *HitLocation.ToString());
-			GetControlledTank()->AimAt(HitLocation);
+			AimComponent->AimAt(HitLocation);
 		}
 	}
 
@@ -53,8 +46,6 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector &HitLocation) const {
 	float PosX = ViewportSizeX * CrossHairLocationX;
 	float PosY = ViewportSizeY * CrossHairLocationY;
 	FVector2D ScreenPosition = FVector2D(PosX, PosY);
-
-	//UE_LOG(LogTemp, Warning, TEXT("PosX : %f - PosY: %f"), PosX, PosY);
 
 	FVector LookDirection;
 	if (GetLookDirection(ScreenPosition, LookDirection)) {

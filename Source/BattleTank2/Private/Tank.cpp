@@ -1,10 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BattleTank2.h"
-#include "TankBarrel.h"
-#include "TankTurret.h"
-#include "Projectile.h"
-#include "TankAimingComponent.h"
 #include "Tank.h"
 
 
@@ -22,36 +18,7 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
-	
-	//TODO Barrel here is only to Fire. To be removed later.
-	Barrel = FindComponentByClass<UTankBarrel>();
 }
 
 
-void ATank::AimAt(FVector HitLocation) 
-{
-	if (ensure(TankAimingComponent != nullptr)) { 
-		TankAimingComponent->AimAt(HitLocation, LauchSpeed);
-	}
-}
 
-void ATank::Fire(){
-	
-	bool IsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
-
-	if (ensure(Barrel != nullptr)) {
-		if (IsReloaded) {
-			auto ProjectileLocation = Barrel->GetSocketLocation(FName("Projectile"));
-			auto ProjectileRotation = Barrel->GetSocketRotation(FName("Projectile"));
-			FActorSpawnParameters SpawnParameters;
-			auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,ProjectileLocation, ProjectileRotation,SpawnParameters);
-
-			Projectile->LaunchProjectile(LauchSpeed);
-
-			LastFireTime = FPlatformTime::Seconds();
-
-		}
-	}
-
-}

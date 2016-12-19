@@ -30,9 +30,6 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	float LineTraceRange = 1000000.0f;
 
-	UFUNCTION(BlueprintCallable, Category="Setup")
-	ATank* GetControlledTank() const;
-	
 	virtual void BeginPlay() override;
 	
 	// Called every frame

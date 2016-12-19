@@ -3,6 +3,7 @@
 #include "BattleTank2.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
+#include "Projectile.h"
 #include "TankAimingComponent.h"
 
 
@@ -23,7 +24,7 @@ void UTankAimingComponent::Initialize(UTankBarrel* TankBarrel, UTankTurret* Tank
 
 }
 
-void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
+void UTankAimingComponent::AimAt(FVector HitLocation) {
 	if (ensure(Barrel != nullptr)) {
 		FVector OutLaunchVelocity;
 		FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
@@ -52,25 +53,33 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 	}
 }
 
-void UTankAimingComponent::SetBarrel(UTankBarrel * BarrelToSet)
-{
-	if (!ensure(BarrelToSet)) { return; }
-	Barrel = BarrelToSet;
-}
-
-void UTankAimingComponent::SetTurret(UTankTurret* TurretToSet) {
-	if (!TurretToSet) { return; }
-	this->Turret = TurretToSet;
-}
-
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 	if (!ensure(Barrel)) { return; }
 
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
-	//UE_LOG(LogTemp, Warning, TEXT("AimAsRotator : %s"), *AimAsRotator.ToString());
 
 	Barrel->Elevate(DeltaRotator.Pitch);
 	Turret->Rotate(DeltaRotator.Yaw);
+}
+
+
+void UTankAimingComponent::Fire() {
+
+	bool IsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+
+	if (ensure(Barrel != nullptr) && ensure(ProjectileBlueprint != nullptr)) {
+		if (IsReloaded) {
+			auto ProjectileLocation = Barrel->GetSocketLocation(FName("Projectile"));
+			auto ProjectileRotation = Barrel->GetSocketRotation(FName("Projectile"));
+			FActorSpawnParameters SpawnParameters;
+			auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, ProjectileLocation, ProjectileRotation, SpawnParameters);
+
+			Projectile->LaunchProjectile(LaunchSpeed);
+
+			LastFireTime = FPlatformTime::Seconds();
+		}
+	}
+
 }
