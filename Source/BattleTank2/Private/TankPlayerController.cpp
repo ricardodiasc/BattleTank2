@@ -32,8 +32,8 @@ void ATankPlayerController::AimTowardsCrosshair() {
 
 	if (ensure(AimComponent)) {
 		FVector HitLocation;
-
-		if (GetSightRayHitLocation(HitLocation)) {
+		bool bGotHitLocation = GetSightRayHitLocation(HitLocation);
+		if (bGotHitLocation) {
 			AimComponent->AimAt(HitLocation);
 		}
 	}
@@ -53,9 +53,7 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector &HitLocation) const {
 
 	FVector LookDirection;
 	if (GetLookDirection(ScreenPosition, LookDirection)) {
-		//UE_LOG(LogTemp, Warning, TEXT("World Direction %s"), *LookDirection.ToString());
 		return GetLookVectorHitLocation(LookDirection, HitLocation);
-		//return true;
 	}
 	
 	return false;

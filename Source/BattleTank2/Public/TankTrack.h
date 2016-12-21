@@ -17,15 +17,20 @@ public:
 
 	UTankTrack();
 
+	float CurrentThrottle = 0.0f;
+
 	//Set force to tank track
 	UFUNCTION(BlueprintCallable, Category="Tank input")
 	void SetThrottle(float Throttle);
+
+	void DriveTrack();
 	
 	UPROPERTY(EditDefaultsOnly)
 	float TrackMaxDrivingForce = 40000000.0f;
 
 	virtual void BeginPlay() override;
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	void ApplySidewaysForce();
 
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);

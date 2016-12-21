@@ -29,11 +29,7 @@ void UTankMovementComponent::IntendMoveRight(float Throw) {
 }
 
 void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) {
-	//No need to call Super because we are replacing the functionality
-	
-	//auto TankName = GetOwner()->GetName();
-	//UE_LOG(LogTemp, Warning, TEXT("Tank AI [%s] is headed towards to %s"),*TankName, *MoveVelocity.ToString())
-	
+	//No need to call Super because we are replacing the functionality	
 	auto TankForwardVector = GetOwner()->GetActorForwardVector().SafeNormal();
 	auto AIForwardIntention = MoveVelocity.GetSafeNormal();
 

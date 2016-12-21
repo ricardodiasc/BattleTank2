@@ -5,21 +5,22 @@
 
 
 UTankTrack::UTankTrack() {
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
 void UTankTrack::SetThrottle(float Throttle) {
-	//auto Name = GetName();
-	//UE_LOG(LogTemp, Warning, TEXT("%s throttling at %f"), *Name, Throttle);
+	CurrentThrottle = FMath::Clamp<float>(CurrentThrottle + Throttle, -1.0f,1.0f);	
+}
 
-	auto ForceApplied = GetForwardVector() * TrackMaxDrivingForce * Throttle;
+void UTankTrack::DriveTrack()
+{
+	auto ForceApplied = GetForwardVector() * TrackMaxDrivingForce * CurrentThrottle;
 
 	auto ForceLocation = GetComponentLocation();
 
 	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
 
 	TankRoot->AddForceAtLocation(ForceApplied, ForceLocation);
-
 }
 
 void UTankTrack::BeginPlay() {
@@ -27,19 +28,18 @@ void UTankTrack::BeginPlay() {
 }
 
 void UTankTrack::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit) {
-	UE_LOG(LogTemp, Warning, TEXT("I`m hit!!!"));
+	DriveTrack();
+	ApplySidewaysForce();
+	CurrentThrottle = 0.0f;
 }
 
-void UTankTrack::TickComponent(float DeltaTime,enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	//Calculate Slippage Speed
-		//How fast tank track is going right
-	float SlippageSpeed = FVector::DotProduct(GetRightVector(), GetComponentVelocity());
 
-	//Vector to opposing direction of slippage
+void UTankTrack::ApplySidewaysForce()
+{
+	float SlippageSpeed = FVector::DotProduct(GetRightVector(), GetComponentVelocity());
+	float DeltaTime = GetWorld()->GetDeltaSeconds();
 	FVector CorrectionAcceleration = -(SlippageSpeed / DeltaTime * GetRightVector());
-	
+
 
 	auto TankRoot = Cast<UStaticMeshComponent>(GetOwner()->GetRootComponent());
 	auto TankMass = TankRoot->GetMass();
@@ -47,8 +47,5 @@ void UTankTrack::TickComponent(float DeltaTime,enum ELevelTick TickType, FActorC
 	auto CorrectionForce = (TankMass * CorrectionAcceleration) / 2;
 
 	TankRoot->AddForce(CorrectionForce);
-
-	//Work out required acceleration to correct in this frame
-	//Calculat eand apply sideways force for (F = m * a)
 }
 
