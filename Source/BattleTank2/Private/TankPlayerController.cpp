@@ -24,6 +24,10 @@ void ATankPlayerController::Tick(float DeltaTime)
 
 //Aim At Crosshair on screen. Used as reference to rotate the barrel.
 void ATankPlayerController::AimTowardsCrosshair() {
+	//Test GetPawn() in case there is nothing possessing that tank.
+	// For some reason, the editor crash in here if no test and exit
+	if (!GetPawn()) { return; }
+	
 	auto AimComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 
 	if (ensure(AimComponent)) {
