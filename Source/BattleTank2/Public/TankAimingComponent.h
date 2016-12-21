@@ -26,6 +26,11 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
+
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override	;
+
+	virtual void BeginPlay() override;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float LaunchSpeed = 4000.0f;
 
@@ -49,14 +54,19 @@ public:
 
 
 	UPROPERTY(BlueprintReadOnly, Category="Firing State")
-	EFiringStatus FiringState = EFiringStatus::LOCKED;
+	EFiringStatus FiringState = EFiringStatus::RELOADING;
 
 private:
 	UTankBarrel* Barrel;
 	UTankTurret* Turret;
 
+	FVector AimDirection;
+
 
 	//Move Barrel towards to a aim direction
 	void MoveBarrelTowards(FVector AimDirection);
+
+	//Checks if barrel is moving to guide aim Crosshair
+	bool IsBarrelMoving();
 	
 };
