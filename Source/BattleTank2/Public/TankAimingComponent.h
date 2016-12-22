@@ -9,7 +9,8 @@ UENUM()
 enum class EFiringStatus :uint8 {
 	RELOADING,
 	AIMING,
-	LOCKED
+	LOCKED,
+	OUT_OF_AMMO
 };
 
 
@@ -38,6 +39,7 @@ public:
 	float ReloadTimeInSeconds = 3.0f;
 
 	double LastFireTime = 0.0;
+	
 
 	UPROPERTY(EditAnywhere, Category = "Firing")
 	TSubclassOf<AProjectile> ProjectileBlueprint;
@@ -52,8 +54,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Custom")
 	void Fire();
 
+	UFUNCTION(BlueprintCallable, Category="Custom")
+	int GetRoundsLeft() const;
 
-	EFiringStatus GetFiringState();
+	EFiringStatus GetFiringState() const;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Firing State")
@@ -63,6 +67,8 @@ private:
 	UTankTurret* Turret;
 
 	
+	int RoundsLeft = 3;
+
 
 	FVector AimDirection;
 

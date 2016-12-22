@@ -111,7 +111,7 @@ void UTankAimingComponent::Fire() {
 	
 	if (ensure(Barrel != nullptr)) {
 		if(ensure(ProjectileBlueprint != nullptr)) {
-			if (FiringState != EFiringStatus::RELOADING) {
+			if (FiringState != EFiringStatus::RELOADING && RoundsLeft != 0) {
 				auto ProjectileLocation = Barrel->GetSocketLocation(FName("Projectile"));
 				auto ProjectileRotation = Barrel->GetSocketRotation(FName("Projectile"));
 				FActorSpawnParameters SpawnParameters;
@@ -120,13 +120,19 @@ void UTankAimingComponent::Fire() {
 				Projectile->LaunchProjectile(LaunchSpeed);
 
 				LastFireTime = FPlatformTime::Seconds();
+				RoundsLeft = RoundsLeft - 1;
 			}
 		}
 	}
 
 }
 
-EFiringStatus UTankAimingComponent::GetFiringState()
+EFiringStatus UTankAimingComponent::GetFiringState() const
 {
 	return FiringState;
+}
+
+int UTankAimingComponent::GetRoundsLeft() const
+{
+	return RoundsLeft;
 }
