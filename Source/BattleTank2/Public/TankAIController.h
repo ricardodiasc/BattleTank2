@@ -12,7 +12,10 @@ UCLASS()
 class BATTLETANK2_API ATankAIController : public AAIController
 {
 	GENERATED_BODY()
-	
+
+protected:
+	UPROPERTY(EditAnywhere, Category = "Setup")
+	float AcceptanceRadius = 8000.0f;
 public:
 	ATankAIController();
 
@@ -21,5 +24,5 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 	//Distance to AI tank can approximate
-	float AcceptanceRadius = 3000.0f;
+
 };

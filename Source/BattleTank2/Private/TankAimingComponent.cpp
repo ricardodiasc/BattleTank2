@@ -125,3 +125,8 @@ void UTankAimingComponent::Fire() {
 	}
 
 }
+
+EFiringStatus UTankAimingComponent::GetFiringState()
+{
+	return FiringState;
+}

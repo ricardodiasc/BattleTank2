@@ -53,12 +53,16 @@ public:
 	void Fire();
 
 
-	UPROPERTY(BlueprintReadOnly, Category="Firing State")
-	EFiringStatus FiringState = EFiringStatus::RELOADING;
+	EFiringStatus GetFiringState();
 
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "Firing State")
+	EFiringStatus FiringState = EFiringStatus::RELOADING;
 private:
 	UTankBarrel* Barrel;
 	UTankTurret* Turret;
+
+	
 
 	FVector AimDirection;
 
