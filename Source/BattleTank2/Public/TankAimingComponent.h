@@ -55,19 +55,23 @@ public:
 	void Fire();
 
 	UFUNCTION(BlueprintCallable, Category="Custom")
-	int GetRoundsLeft() const;
+	int32 GetRoundsLeft() const;
+	UPROPERTY(EditAnywhere, Category = "Firing")
+	int32 RoundsLeft = 30;
+
 
 	EFiringStatus GetFiringState() const;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Firing State")
 	EFiringStatus FiringState = EFiringStatus::RELOADING;
+
+	
 private:
 	UTankBarrel* Barrel;
 	UTankTurret* Turret;
 
 	
-	int RoundsLeft = 3;
 
 
 	FVector AimDirection;
