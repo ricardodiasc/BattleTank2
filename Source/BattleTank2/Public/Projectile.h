@@ -28,10 +28,21 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Particle Components")
 	UParticleSystemComponent* ImpactBlast;
 	
+	UPROPERTY(VisibleAnywhere, Category = "Explosion Force")
+	URadialForceComponent* ExplosionForce = nullptr;
+
 private: 
 	UProjectileMovementComponent* ProjectileMovement = nullptr;
 
+	//Wait in seconds to destroy the projectile
+	UPROPERTY(EditDefaultsOnly, Category = "Particle" )
+	float DestroyDelay = 10.0f;
+
+	float ProjectileDamage = 20.0f;
+
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
-	
+
+	UFUNCTION()
+	void OnTimerExpire();
 };
