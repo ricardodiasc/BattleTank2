@@ -3,6 +3,7 @@
 
 #include "BattleTank2.h"
 #include "TankAimingComponent.h"
+#include "Tank.h"
 #include "TankPlayerController.h"
 
 void ATankPlayerController::BeginPlay() {
@@ -41,8 +42,6 @@ void ATankPlayerController::AimTowardsCrosshair() {
 }
 
 bool ATankPlayerController::GetSightRayHitLocation(FVector &HitLocation) const {
-	
-
 	//Find cross hair projection
 	int32 ViewportSizeX, ViewportSizeY;
 	GetViewportSize(ViewportSizeX, ViewportSizeY);
@@ -81,4 +80,20 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVec
 		HitLocation = FVector::ZeroVector;
 		return false;
 	}
+}
+
+void ATankPlayerController::SetPawn(APawn * InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (ensure(InPawn != nullptr)) {
+		auto PossessedTank = Cast<ATank>(InPawn);
+
+		if (ensure(PossessedTank != nullptr)) {
+			PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankPlayerController::OnTankDeath);
+		}
+	}
+}
+
+void ATankPlayerController::OnTankDeath() {
+	StartSpectatingOnly(); 
 }

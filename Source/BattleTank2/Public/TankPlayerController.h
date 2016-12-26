@@ -37,10 +37,15 @@ public:
 
 	void AimTowardsCrosshair();
 	
-	//Event Responsible for trigger TankAimingComponent Found
+	//---------------DO NOT IMPLEMENT THIS IN C++ -----------------------------
+	//Event Responsible for trigger TankAimingComponent Found. It is blueprint implemented 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
 	void FoundAimComponent(UTankAimingComponent* AimComponent);
 
+	virtual void SetPawn(APawn* InPawn) override;
+
+	UFUNCTION()
+	void OnTankDeath();
 private:
 	bool GetSightRayHitLocation(FVector &HitLocation) const;
 	bool GetLookDirection(FVector2D ScreenPosition, FVector &LookDirection) const;

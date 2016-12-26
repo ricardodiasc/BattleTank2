@@ -2,11 +2,13 @@
 
 #include "BattleTank2.h"
 #include "TankAimingComponent.h"
+#include "Tank.h"
 #include "TankAIController.h"
 
 
 ATankAIController::ATankAIController() {
 	PrimaryActorTick.bCanEverTick = true;
+
 }
 
 void ATankAIController::BeginPlay() {
@@ -31,6 +33,26 @@ void ATankAIController::Tick(float DeltaSeconds)
 			AimComponent->Fire();
 		}
 	}
+}
+
+void ATankAIController::OnTankDeath()
+{
+	auto TankPawn = GetPawn();
+	if (TankPawn != nullptr) {
+		TankPawn->DetachFromControllerPendingDestroy();
+	}
+}
+
+void ATankAIController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (InPawn != nullptr) {
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (ensure(PossessedTank != nullptr)) {
+			PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankAIController::OnTankDeath);
+		}
+	}
+
 }
 
 
